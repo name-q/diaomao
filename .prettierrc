@@ -2,6 +2,7 @@
   "arrowParens": "avoid",
   "bracketSameLine": false,
   "bracketSpacing": true,
+  "arrayBracketSpacing": true,
   "singleQuote": true,
   "trailingComma": "all",
   "semi": true,

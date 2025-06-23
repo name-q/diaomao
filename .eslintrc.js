@@ -10,14 +10,14 @@ module.exports = {
   },
   rules: {
     // Prettier 相关规则
-    quotes: ['error', 'single'],
-    semi: ['error', 'always'],
-    'comma-dangle': ['error', 'all'],
-    'array-bracket-spacing': ['error', 'always'],
+    quotes: [ 'error', 'single' ],
+    semi: [ 'error', 'always' ],
+    'comma-dangle': [ 'error', 'always-multiline' ],
+    'array-bracket-spacing': [ 'error', 'always' ],
     'object-shorthand': 'error',
-    'quote-props': ['error', 'as-needed'],
+    'quote-props': [ 'error', 'as-needed' ],
     'no-else-return': 'error',
     'no-trailing-spaces': 'error',
-    'eol-last': ['error', 'always'],
+    'eol-last': [ 'error', 'always' ],
   },
 };

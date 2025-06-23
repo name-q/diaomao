@@ -45,7 +45,7 @@ class WebhookController extends Controller {
 
     if (eventType === 'pull_request') {
       const action = data.action;
-      if (['opened', 'synchronize', 'reopened'].includes(action)) {
+      if ([ 'opened', 'synchronize', 'reopened' ].includes(action)) {
         // 异步处理PR审查
         setImmediate(() => {
           ctx.service.review.handleGithubPullRequest(data).catch(err => {
@@ -71,7 +71,7 @@ class WebhookController extends Controller {
 
     if (objectKind === 'merge_request') {
       const action = data.object_attributes?.action;
-      if (['open', 'update', 'reopen'].includes(action)) {
+      if ([ 'open', 'update', 'reopen' ].includes(action)) {
         // 异步处理MR审查
         setImmediate(() => {
           ctx.service.review.handleGitlabMergeRequest(data).catch(err => {

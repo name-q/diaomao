@@ -126,14 +126,14 @@ class WecomService extends Service {
           content: this.formatMarkdown(content),
         },
       };
-    } else {
-      return {
-        msgtype: 'text',
-        text: {
-          content: content,
-        },
-      };
     }
+    return {
+      msgtype: 'text',
+      text: {
+        content,
+      },
+    };
+
   }
 
   formatMarkdown(content) {
