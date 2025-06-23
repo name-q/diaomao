@@ -44,7 +44,7 @@ class AiService extends Service {
 4. **最佳实践**：是否遵循语言和框架的最佳实践
 
 请以${
-  config.review.style === 'professional' ? '专业严谨' : '友好建议'
+  config.review.style === 'professional' ? '专业严谨' : config.review.style
 }的语调提供反馈，并在最后给出总分（1-10分）。`;
 
     const userPrompt = `请审查以下代码变更：
