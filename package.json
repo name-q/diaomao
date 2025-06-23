@@ -1,7 +1,7 @@
 {
-  "name": "ai-codereview",
+  "name": "diaomao",
   "version": "1.0.0",
-  "description": "AI代码审查服务",
+  "description": "掉毛 - AI代码审查服务",
   "private": true,
   "egg": {
     "declarations": true
@@ -25,15 +25,15 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-ai-codereview",
-    "stop": "egg-scripts stop --title=egg-server-ai-codereview",
+    "start": "egg-scripts start --daemon --title=egg-server-diaomao",
+    "stop": "egg-scripts stop --title=egg-server-diaomao",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
-    "test": "npm run lint -- --fix && npm run test-local",
+    "test": "pnpm run lint -- --fix && pnpm run test-local",
     "test-local": "egg-bin test",
     "cov": "egg-bin cov",
     "lint": "eslint .",
-    "ci": "npm run lint && npm run cov",
-    "autofix": "npm run lint -- --fix"
+    "ci": "pnpm run lint && pnpm run cov",
+    "autofix": "pnpm run lint -- --fix"
   }
 }

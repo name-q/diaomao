@@ -1,6 +1,10 @@
-# AI代码审查服务
-
-基于 Egg.js 的 AI 代码审查服务，支持 GitHub 和 GitLab 的 Webhook，自动进行代码审查并通过企业微信发送通知。
+<div align="center">
+  <img src="https://raw.githubusercontent.com/yourusername/diaomao/main/logo.png" alt="掉毛 Logo" width="200" height="200">
+  
+  # 掉毛 (Diaomao)
+  
+  基于 Egg.js 的 AI 代码审查服务，支持 GitHub 和 GitLab 的 Webhook，自动进行代码审查并通过企业微信发送通知。
+</div>
 
 ## 功能特性
 
@@ -15,7 +19,7 @@
 ### 1. 安装依赖
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 2. 配置环境变量
@@ -30,10 +34,10 @@ cp .env.example .env
 
 ```bash
 # 开发模式
-npm run dev
+pnpm run dev
 
 # 生产模式
-npm start
+pnpm start
 ```
 
 ## 配置说明
@@ -134,10 +138,10 @@ GITLAB_ACCESS_TOKEN=your_gitlab_token
 
 ```bash
 # 构建镜像
-docker build -t ai-codereview .
+docker build -t diaomao .
 
 # 运行容器
-docker run -d --name ai-codereview -p 7001:7001 --env-file .env ai-codereview
+docker run -d --name diaomao -p 7001:7001 --env-file .env diaomao
 ```
 
 ### PM2部署
@@ -147,7 +151,7 @@ docker run -d --name ai-codereview -p 7001:7001 --env-file .env ai-codereview
 npm install -g pm2
 
 # 启动服务
-pm2 start npm --name "ai-codereview" -- start
+pm2 start pnpm --name "diaomao" -- start
 
 # 查看状态
 pm2 status
