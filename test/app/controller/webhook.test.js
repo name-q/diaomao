@@ -4,7 +4,8 @@ const { app, assert } = require('egg-mock/bootstrap');
 
 describe('test/app/controller/webhook.test.js', () => {
   it('should GET /', () => {
-    return app.httpRequest()
+    return app
+      .httpRequest()
       .get('/')
       .expect(200)
       .expect(res => {
@@ -13,7 +14,8 @@ describe('test/app/controller/webhook.test.js', () => {
   });
 
   it('should POST /webhook with invalid data', () => {
-    return app.httpRequest()
+    return app
+      .httpRequest()
       .post('/webhook')
       .send({})
       .expect(200)

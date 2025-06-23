@@ -9,6 +9,15 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    // 自定义规则
+    // Prettier 相关规则
+    quotes: ['error', 'single'],
+    semi: ['error', 'always'],
+    'comma-dangle': ['error', 'all'],
+    'array-bracket-spacing': ['error', 'always'],
+    'object-shorthand': 'error',
+    'quote-props': ['error', 'as-needed'],
+    'no-else-return': 'error',
+    'no-trailing-spaces': 'error',
+    'eol-last': ['error', 'always'],
   },
 };

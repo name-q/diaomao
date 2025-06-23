@@ -1,6 +1,0 @@
-2025-06-23 16:47:56,340 INFO 68915 [egg-schedule]: register schedule /Users/apple/Documents/other/ai-codereview/node_modules/egg-multipart/app/schedule/clean_tmpdir.js
-2025-06-23 16:47:56,340 INFO 68915 [egg-schedule]: register schedule /Users/apple/Documents/other/ai-codereview/node_modules/egg-logrotator/app/schedule/clean_log.js
-2025-06-23 16:47:56,340 INFO 68915 [egg-schedule]: register schedule /Users/apple/Documents/other/ai-codereview/node_modules/egg-logrotator/app/schedule/rotate_by_file.js
-2025-06-23 16:47:56,404 INFO 68915 [Timer] /Users/apple/Documents/other/ai-codereview/node_modules/egg-multipart/app/schedule/clean_tmpdir.js next time will execute after 42123598ms at 2025-06-24 04:30:00.002
-2025-06-23 16:47:56,404 INFO 68915 [Timer] /Users/apple/Documents/other/ai-codereview/node_modules/egg-logrotator/app/schedule/clean_log.js next time will execute after 25923596ms at 2025-06-24 00:00:00.000
-2025-06-23 16:47:56,404 INFO 68915 [Timer] /Users/apple/Documents/other/ai-codereview/node_modules/egg-logrotator/app/schedule/rotate_by_file.js next time will execute after 25924596ms at 2025-06-24 00:00:01.000

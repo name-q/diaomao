@@ -4,7 +4,7 @@
  * @param {Egg.EggAppInfo} appInfo app info
  */
 module.exports = appInfo => {
-  const config = exports = {};
+  const config = (exports = {});
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1234567890';
@@ -53,7 +53,9 @@ module.exports = appInfo => {
     },
     qwen: {
       apiKey: process.env.QWEN_API_KEY,
-      baseURL: process.env.QWEN_BASE_URL || 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+      baseURL:
+        process.env.QWEN_BASE_URL ||
+        'https://dashscope.aliyuncs.com/compatible-mode/v1',
       model: process.env.QWEN_MODEL || 'qwen-turbo',
     },
   };

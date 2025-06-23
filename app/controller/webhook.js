@@ -10,7 +10,7 @@ class WebhookController extends Controller {
 
   async handleWebhook() {
     const { ctx } = this;
-    
+
     try {
       const data = ctx.request.body;
       if (!data) {
@@ -21,7 +21,7 @@ class WebhookController extends Controller {
 
       // 判断是GitHub还是GitLab的webhook
       const githubEvent = ctx.headers['x-github-event'];
-      
+
       if (githubEvent) {
         // GitHub webhook
         await this.handleGithubWebhook(githubEvent, data);
@@ -29,7 +29,7 @@ class WebhookController extends Controller {
         // GitLab webhook
         await this.handleGitlabWebhook(data);
       }
-      
+
       ctx.body = { message: '请求已接收，正在异步处理' };
     } catch (error) {
       ctx.logger.error('Webhook处理失败:', error);
@@ -40,9 +40,9 @@ class WebhookController extends Controller {
 
   async handleGithubWebhook(eventType, data) {
     const { ctx } = this;
-    
+
     ctx.logger.info(`收到GitHub事件: ${eventType}`);
-    
+
     if (eventType === 'pull_request') {
       const action = data.action;
       if (['opened', 'synchronize', 'reopened'].includes(action)) {
@@ -65,10 +65,10 @@ class WebhookController extends Controller {
 
   async handleGitlabWebhook(data) {
     const { ctx } = this;
-    
+
     const objectKind = data.object_kind;
     ctx.logger.info(`收到GitLab事件: ${objectKind}`);
-    
+
     if (objectKind === 'merge_request') {
       const action = data.object_attributes?.action;
       if (['open', 'update', 'reopen'].includes(action)) {
