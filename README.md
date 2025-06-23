@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/yourusername/diaomao/main/logo.png" alt="掉毛 Logo" width="200" height="200">
+  <img src="https://raw.githubusercontent.com/name-q/diaomao/main/logo.png" alt="掉毛 Logo" width="200" height="200">
   
   # 掉毛 (Diaomao)
   
