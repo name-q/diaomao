@@ -136,6 +136,24 @@ GITLAB_ACCESS_TOKEN=your_gitlab_token
 
 ### Docker部署
 
+#### 方式一：使用 docker-compose（推荐）
+
+```bash
+# 启动服务
+docker-compose up -d
+
+# 停止服务
+docker-compose down
+
+# 查看日志
+docker-compose logs -f
+
+# 重启服务
+docker-compose restart
+```
+
+#### 方式二：使用 Docker 命令
+
 ```bash
 # 构建镜像
 docker build -t diaomao .
