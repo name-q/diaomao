@@ -7,10 +7,11 @@
     "declarations": true
   },
   "dependencies": {
-    "egg": "^3",
-    "egg-scripts": "^2",
-    "egg-cors": "^2",
     "axios": "^1.6.0",
+    "dotenv": "^16.5.0",
+    "egg": "^3",
+    "egg-cors": "^2",
+    "egg-scripts": "^2",
     "js-yaml": "^4.1.0",
     "tiktoken": "^1.0.10"
   },
