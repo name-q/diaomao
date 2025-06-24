@@ -1,8 +1,8 @@
-version: '3.8'
-
 services:
-  ai-codereview:
+  diaomao:
     build: .
+    image: diaomao
+    pull_policy: never
     ports:
       - "7001:7001"
     environment:
