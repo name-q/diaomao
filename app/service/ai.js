@@ -22,8 +22,8 @@ class AiService extends Service {
       // 构建提示词
       const messages = this.buildMessages(truncatedDiff, commitMessage);
 
-      // 调用AI服务
-      const result = await this.callAI(messages);
+      // 调用AI服务（带重试机制）
+      const result = await this.callAIWithRetry(messages);
 
       // 清理结果格式
       return this.cleanResult(result);
@@ -31,6 +31,32 @@ class AiService extends Service {
       ctx.logger.error('AI代码审查失败:', error);
       return '代码审查失败，请稍后重试';
     }
+  }
+
+  async callAIWithRetry(messages, maxRetries = 2) {
+    const { ctx } = this;
+    let lastError;
+
+    for (let i = 0; i <= maxRetries; i++) {
+      try {
+        if (i > 0) {
+          ctx.logger.info(`AI服务调用重试第${i}次`);
+          await this.sleep(1000 * i); // 递增延迟
+        }
+        return await this.callAI(messages);
+      } catch (error) {
+        lastError = error;
+        if (i === maxRetries) {
+          throw error;
+        }
+        ctx.logger.warn(`AI服务调用失败，准备重试: ${error.message}`);
+      }
+    }
+    throw lastError;
+  }
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   buildMessages(diffContent, commitMessage) {
@@ -99,7 +125,7 @@ ${diffContent}
             Authorization: `Bearer ${config.ai.openai.apiKey}`,
             'Content-Type': 'application/json',
           },
-          timeout: 60000,
+          timeout: 90000, // 增加超时时间到90秒
         },
       );
 
@@ -130,7 +156,7 @@ ${diffContent}
             Authorization: `Bearer ${config.ai.deepseek.apiKey}`,
             'Content-Type': 'application/json',
           },
-          timeout: 60000,
+          timeout: 90000, // 增加超时时间到90秒
         },
       );
 
@@ -161,7 +187,7 @@ ${diffContent}
             Authorization: `Bearer ${config.ai.qwen.apiKey}`,
             'Content-Type': 'application/json',
           },
-          timeout: 60000,
+          timeout: 90000, // 增加超时时间到90秒
         },
       );
 

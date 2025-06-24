@@ -38,6 +38,19 @@ module.exports = appInfo => {
     },
   };
 
+  // 集群客户端配置
+  config.clusterClient = {
+    maxIdleTime: 120000, // 增加最大空闲时间到2分钟
+    responseTimeout: 180000, // 响应超时时间3分钟
+  };
+
+  // HTTP客户端配置
+  config.httpclient = {
+    request: {
+      timeout: 120000, // 请求超时2分钟
+    },
+  };
+
   // AI配置
   config.ai = {
     provider: process.env.LLM_PROVIDER || 'openai',
