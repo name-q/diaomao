@@ -29,11 +29,11 @@
     "stop": "egg-scripts stop --title=egg-server-diaomao",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
-    "test": "pnpm run lint -- --fix && pnpm run test-local",
+    "test": "npm run lint -- --fix && npm run test-local",
     "test-local": "egg-bin test",
     "cov": "egg-bin cov",
     "lint": "eslint .",
-    "ci": "pnpm run lint && pnpm run cov",
-    "autofix": "pnpm run lint -- --fix"
+    "ci": "npm run lint && npm run cov",
+    "autofix": "npm run lint -- --fix"
   }
 }

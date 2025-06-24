@@ -19,7 +19,7 @@
 ### 1. 安装依赖
 
 ```bash
-pnpm install
+pnpm i
 ```
 
 ### 2. 配置环境变量
@@ -34,7 +34,7 @@ cp .env.example .env
 
 ```bash
 # 开发模式
-pnpm run dev
+pnpm dev
 
 # 生产模式
 pnpm start
@@ -151,7 +151,7 @@ docker run -d --name diaomao -p 7001:7001 --env-file .env diaomao
 npm install -g pm2
 
 # 启动服务
-pm2 start pnpm --name "diaomao" -- start
+pm2 start npm --name "diaomao" -- start
 
 # 查看状态
 pm2 status
