@@ -33,7 +33,7 @@ module.exports = appInfo => {
   // 服务端口
   config.cluster = {
     listen: {
-      port: process.env.SERVER_PORT || 7001,
+      port: parseInt(process.env.SERVER_PORT) || 7001,
       hostname: '0.0.0.0',
     },
   };
@@ -83,6 +83,11 @@ module.exports = appInfo => {
   config.review = {
     maxTokens: parseInt(process.env.REVIEW_MAX_TOKENS) || 10000,
     style: process.env.REVIEW_STYLE || 'professional',
+  };
+
+  // 日志配置
+  config.logger = {
+    dir: 'logs',
   };
 
   return {
