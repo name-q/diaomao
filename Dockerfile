@@ -1,12 +1,15 @@
 FROM node:18-alpine
 
+# 安装 pnpm 8
+RUN npm install -g pnpm@8
+
 WORKDIR /app
 
 # 复制package文件
-COPY package*.json ./
+COPY package*.json pnpm-lock.yaml* ./
 
 # 安装依赖
-RUN npm ci --only=production
+RUN pnpm install --prod --frozen-lockfile
 
 # 复制应用代码
 COPY . .
@@ -15,4 +18,4 @@ COPY . .
 EXPOSE 7001
 
 # 启动应用
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
