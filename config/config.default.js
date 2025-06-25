@@ -85,6 +85,7 @@ module.exports = appInfo => {
   config.review = {
     maxTokens: parseInt(process.env.REVIEW_MAX_TOKENS) || 10000,
     style: process.env.REVIEW_STYLE || 'professional',
+    minScore: parseInt(process.env.REVIEW_MIN_SCORE) || 0,
   };
 
   // 日志配置

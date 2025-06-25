@@ -105,6 +105,10 @@ class ReviewService extends Service {
         mr.title,
       );
 
+      // 提取分数并检查是否需要关闭MR
+      const score = this.extractScore(reviewResult);
+      const shouldClose = score !== null && score < this.config.review.minScore;
+
       // 发布评论到GitLab MR
       await this.postGitlabMRComment(
         gitlabUrl,
@@ -112,10 +116,21 @@ class ReviewService extends Service {
         project.id,
         mr.iid,
         reviewResult,
+        shouldClose,
       );
 
+      // 如果分数过低，关闭MR
+      if (shouldClose) {
+        await this.closeGitlabMR(gitlabUrl, token, project.id, mr.iid);
+      }
+
       // 发送企业微信通知
-      const message = this.formatMRMessage(mr, project, reviewResult);
+      const message = this.formatMRMessage(
+        mr,
+        project,
+        reviewResult,
+        shouldClose,
+      );
       await ctx.service.wecom.sendNotification(message, project.name);
 
       ctx.logger.info(`GitLab MR审查完成: ${mr.url}`);
@@ -244,13 +259,24 @@ class ReviewService extends Service {
     }
   }
 
-  async postGitlabMRComment(gitlabUrl, token, projectId, mrIid, reviewResult) {
+  async postGitlabMRComment(
+    gitlabUrl,
+    token,
+    projectId,
+    mrIid,
+    reviewResult,
+    shouldClose = false,
+  ) {
     const { ctx } = this;
     try {
       const commentUrl = `${gitlabUrl}/api/v4/projects/${projectId}/merge_requests/${mrIid}/notes`;
-      const commentBody = `## 🤖 AI 代码审查报告
+      let commentBody = `## 🤖 AI 代码审查报告
 
 ${reviewResult}`;
+
+      if (shouldClose) {
+        commentBody += `\n\n---\n\n⚠️ **警告**: 代码质量分数低于最低要求（${this.config.review.minScore}分），该 Merge Request 已被自动关闭。`;
+      }
 
       const response = await ctx.curl(commentUrl, {
         method: 'POST',
@@ -272,6 +298,64 @@ ${reviewResult}`;
     }
   }
 
+  async closeGitlabMR(gitlabUrl, token, projectId, mrIid) {
+    const { ctx } = this;
+    try {
+      const closeUrl = `${gitlabUrl}/api/v4/projects/${projectId}/merge_requests/${mrIid}`;
+
+      await ctx.curl(closeUrl, {
+        method: 'PUT',
+        headers: {
+          'PRIVATE-TOKEN': token,
+          'Content-Type': 'application/json',
+        },
+        data: {
+          state_event: 'close',
+        },
+        timeout: 30000,
+      });
+
+      ctx.logger.info(`成功关闭 GitLab MR: ${mrIid}`);
+    } catch (error) {
+      ctx.logger.error('关闭 GitLab MR 失败:', error);
+      throw error;
+    }
+  }
+
+  extractScore(reviewResult) {
+    const { ctx } = this;
+    try {
+      // 尝试多种分数格式匹配，按优先级排序
+      const patterns = [
+        // x/10 格式（提取分子）
+        /(\d+(?:\.\d+)?)\s*\/\s*10/,
+        // 总评、评分等关键词后的分数
+        /总评[:：]?\s*(\d+(?:\.\d+)?)/,
+        /总分[:：]?\s*(\d+(?:\.\d+)?)/,
+        /评分[:：]?\s*(\d+(?:\.\d+)?)/,
+        /分数[:：]?\s*(\d+(?:\.\d+)?)/,
+        /score[:：]?\s*(\d+(?:\.\d+)?)/i,
+        // 最后匹配单独的数字+分
+        /(\d+(?:\.\d+)?)\s*分/,
+      ];
+
+      for (const pattern of patterns) {
+        const match = reviewResult.match(pattern);
+        if (match) {
+          const score = parseFloat(match[1]);
+          ctx.logger.info(`提取到分数: ${score}`);
+          return score;
+        }
+      }
+
+      ctx.logger.warn('未能从审查结果中提取到分数');
+      return null;
+    } catch (error) {
+      ctx.logger.error('提取分数失败:', error);
+      return null;
+    }
+  }
+
   formatPRMessage(pr, repo, reviewResult) {
     return `## 🔍 代码审查报告 - Pull Request
 
@@ -285,17 +369,22 @@ ${reviewResult}`;
 ${reviewResult}`;
   }
 
-  formatMRMessage(mr, project, reviewResult) {
-    return `## 🔍 代码审查报告 - Merge Request
+  formatMRMessage(mr, project, reviewResult, shouldClose = false) {
+    let message = `## 🔍 代码审查报告 - Merge Request
 
 **项目**: ${project.name}
 **标题**: ${mr.title}
 **作者**: ${mr.author?.name || 'Unknown'}
 **分支**: ${mr.source_branch} → ${mr.target_branch}
-**链接**: ${mr.url}
+**链接**: ${mr.url}`;
 
-### 📋 审查结果
-${reviewResult}`;
+    if (shouldClose) {
+      message += `\n**状态**: ⚠️ 已自动关闭（分数过低）`;
+    }
+
+    message += `\n\n### 📋 审查结果\n${reviewResult}`;
+
+    return message;
   }
 
   formatPushMessage(data, reviewResult) {
