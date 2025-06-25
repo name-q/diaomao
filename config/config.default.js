@@ -1,5 +1,8 @@
 'use strict';
 
+// 加载环境变量
+require('dotenv').config();
+
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
@@ -50,7 +53,6 @@ module.exports = appInfo => {
       timeout: 120000, // 请求超时2分钟
     },
   };
-
   // AI配置
   config.ai = {
     provider: process.env.LLM_PROVIDER || 'openai',
