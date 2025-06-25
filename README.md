@@ -3,7 +3,9 @@
   
   # 掉毛 (Diaomao)
   
-  基于 Egg.js 的 AI 代码审查服务，支持 GitHub 和 GitLab 的 Webhook，自动进行代码审查并通过企业微信发送通知。
+  AI 代码审查服务，支持 GitHub 和 GitLab 的 Webhook，自动进行代码审查并通过企业微信发送通知。
+  
+  **中文** | [English](./README_EN.md)
 </div>
 
 ## 功能特性
@@ -13,6 +15,8 @@
 - 📱 **企业微信通知**: 支持不同项目配置不同的企业微信群
 - ⚡ **异步处理**: 快速响应 Webhook，异步处理代码审查
 - 🛡️ **安全可靠**: 支持 Token 验证和内容截断
+- 🎯 **智能评分**: 自动为 MR/PR 进行代码质量评分并留言
+- 🚫 **自动关闭**: 支持自动关闭不符合质量标准的 MR/PR
 
 ## 快速开始
 
@@ -102,6 +106,24 @@ GITLAB_URL=https://gitlab.example.com
 GITLAB_ACCESS_TOKEN=your_gitlab_token
 ```
 
+### 自动操作配置
+
+#### 自动关闭不合格MR/PR
+```env
+# 启用自动关闭功能
+AUTO_CLOSE_ENABLED=1
+# 质量评分阈值（低于此分数将自动关闭，范围1-10）
+QUALITY_THRESHOLD=6
+```
+
+#### 评分留言配置
+```env
+# 启用评分留言功能
+SCORE_COMMENT_ENABLED=1
+# 评分留言模板（可选，使用默认模板如不配置）
+SCORE_COMMENT_TEMPLATE="代码质量评分：{score}/10\n\n{feedback}"
+```
+
 ## Webhook配置
 
 ### GitHub Webhook
@@ -136,7 +158,17 @@ GITLAB_ACCESS_TOKEN=your_gitlab_token
 
 ### Docker部署
 
-#### 方式一：使用 docker-compose（推荐）
+#### 方式一：使用预构建镜像（推荐）
+
+```bash
+# 拉取镜像
+docker pull nameq/diaomao:v1.0.1
+
+# 运行容器
+docker run -d --name diaomao -p 7001:7001 --env-file .env nameq/diaomao:v1.0.1
+```
+
+#### 方式二：使用 docker-compose
 
 ```bash
 # 启动服务
@@ -152,7 +184,7 @@ docker-compose logs -f
 docker-compose restart
 ```
 
-#### 方式二：使用 Docker 命令
+#### 方式三：本地构建
 
 ```bash
 # 构建镜像
