@@ -105,6 +105,15 @@ class ReviewService extends Service {
         mr.title,
       );
 
+      // 发布评论到GitLab MR
+      await this.postGitlabMRComment(
+        gitlabUrl,
+        token,
+        project.id,
+        mr.iid,
+        reviewResult,
+      );
+
       // 发送企业微信通知
       const message = this.formatMRMessage(mr, project, reviewResult);
       await ctx.service.wecom.sendNotification(message, project.name);
@@ -232,6 +241,34 @@ class ReviewService extends Service {
     } catch (error) {
       ctx.logger.error('获取GitLab commit失败:', error);
       return null;
+    }
+  }
+
+  async postGitlabMRComment(gitlabUrl, token, projectId, mrIid, reviewResult) {
+    const { ctx } = this;
+    try {
+      const commentUrl = `${gitlabUrl}/api/v4/projects/${projectId}/merge_requests/${mrIid}/notes`;
+      const commentBody = `## 🤖 AI 代码审查报告
+
+${reviewResult}`;
+
+      const response = await ctx.curl(commentUrl, {
+        method: 'POST',
+        headers: {
+          'PRIVATE-TOKEN': token,
+          'Content-Type': 'application/json',
+        },
+        data: {
+          body: commentBody,
+        },
+        timeout: 30000,
+      });
+
+      ctx.logger.info('成功发布GitLab MR评论');
+      return JSON.parse(response.data);
+    } catch (error) {
+      ctx.logger.error('发布GitLab MR评论失败:', error);
+      throw error;
     }
   }
 
